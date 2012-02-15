@@ -25,7 +25,6 @@ extern  NSString *const ITDeviceBatteryStateDidChangeNotification;
 extern  NSString *const ITDeviceConnectionStateDidChangeNotification;
 
 #pragma mark - Global Enumerations
-//---------- Enumerations ----------//
 typedef enum
 {
     ITUserInterfaceIdiomPhone,

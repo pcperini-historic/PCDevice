@@ -32,7 +32,8 @@ typedef enum
     ITUserInterfaceIdiomDesktop
 } ITUserInterfaceIdiom;
 
-typedef enum {
+typedef enum
+{
     ITDeviceBatteryStateUnknown,
     ITDeviceBatteryStateUnplugged,
     ITDeviceBatteryStateCharging,

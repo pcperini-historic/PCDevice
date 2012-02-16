@@ -15,9 +15,50 @@ You also use the `ITDevice` instance to detect changes in the device’s charact
 
 Similarly, you can use the `ITDevice` instance to obtain information and notifications about changes to the battery’s charge state (described by the `batteryState` property) and charge level (described by the `batteryLevel` property). The `ITDevice` instance also provides access to the network connection state (described by the `connectionState` property). The network connection state represents the availability of Internet communication and whether the device is connected via a mobile data connection. Enable battery monitoring or connection monitoring only when you need it.
 
-Full documentation will be added when possible.
+More documentation will be added when possible.
 
+##Tasks##
 
+###Getting the Shared Device Instance###
+    + currentDevice
+    ITCurrentDevice
+
+###Determining Available Features###
+    multitaskingSupported (property)
+
+###Identifying the Device and Operating System###
+    name             (property)
+    systemName       (property)
+    systemVersion    (property)
+    model            (property)
+    uniqueIdentifier (property)
+
+###Getting the Device Orientation###
+    orientation                              (property)
+    generatesDeviceOrientationNotificiations (property)
+
+###Getting the Device Battery State###
+    batteryLevel             (property)
+    batteryMonitoringEnabled (property)
+    batteryState             (property)
+
+###Getting the Device Network Connection State###
+    connectionState                       (property)
+    generatesConnectionStateNotifications (property)
+    
+##Properties##
+
+**batteryLevel**
+
+> The battery charge level for the device.
+
+    @property(nonatomic, readonly) float batteryLevel
+    
+> *Discussion*
+
+>> Battery level ranges from 0.0 (fully discharged) to 1.0 (100% charged). Before accessing this property, ensure that battery monitoring is enabled.
+>> If battery monitoring is not enabled, battery state is `ITDeviceBatteryStateUnknown` and the value of this property is -1.0.
+    
 #License#
 
 License Agreement for Source Code provided by Inspyre Technologies

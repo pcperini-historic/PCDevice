@@ -84,9 +84,25 @@ More documentation will be added when possible.
 >> The value for `batteryState` is one of the constants in `ITDeviceBatteryState`.
 >> If battery monitoring is not enabled, the value of this property is `ITDeviceBatteryStateUnknown`.
 
+**connectionState**
+
+> The network connection state for the device.
+
+    @property (nonatomic, readonly) ITDeviceConnectionState connectionState
+    
+> *Discussion*
+
+>> The value for `connectionState` be `ITDeviceConnectionStateUknown` if some error occurrs, and `ITDeviceConnectionStateDisconnected` if Internet is unreachable.
+
+**generatesConnectionStateNotifications**
+
+> A Boolean value that indicates whether the receiver generates connection notifications (`YES`) or not (`NO`).
+
+    @property (nonatomic, getter = isGeneratingConnectionStateNotifications) BOOL generatesConnectionStateNotifications
+
 **generatesDeviceOrientationNotifications**
 
-> A Boolean value that indicates whether the receiver generates orientation notifications (`YES`) or not (`NO`).
+> A Boolean value that indicates whether the receiver generates orientation notifications.
 
     @property (nonatomic, getter = isGeneratingDeviceOrientationNotifications) BOOL generatesDeviceOrientationNotifications
 

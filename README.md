@@ -186,6 +186,128 @@ More documentation will be added when possible.
 
 >> A singleton object that represents the current device.
 
+##Constants and Macros##
+
+**ITCurrentDevice**
+
+> Returns the shared object representing the current device.
+
+    #define ITCurrentDevice [ITDevice currentDevice]
+    
+**ITDeviceBatteryState**
+
+> The battery power state of the device
+
+    typedef enum
+    {
+        ITDeviceBatteryStateUnknown,
+        ITDeviceBatteryStateUnplugged,
+        ITDeviceBatteryStateCharging,
+        ITDeviceBatteryStateFull
+    } ITDeviceBatteryState;
+
+> *Constants*
+
+>> `ITDeviceBatteryStateUnknown`: The battery state for the device cannot be determined.
+>> `ITDeviceBatteryStateUnplugged`: The device is not plugged into power; the battery is discharging.
+>> `ITDeviceBatteryStateCharging`: The device is plugged into power and the battery is less that 100% charged.
+>> `ITDeviceBatteryStateFull`: The device is plugged into power and the battery is 100% charged.
+
+**ITDeviceConnectionState**
+
+> The network connection state of the device.
+
+    typedef enum
+    {
+        ITDeviceConnectionStateUnknown,
+        ITDeviceConnectionStateMobile,
+        ITDeviceConnectionStateWiFi,
+        ITDeviceConnectionStateDisconnected
+    } ITDeviceConnectionState;
+
+> *Constants*
+
+>> `ITDeviceConnectionStateUnknown`: The connection state for the device cannot be determined.
+>> `ITDeviceConnectionStateMobile`: The device is connected to the Internet via a mobile provider.
+>> `ITDeviceConnectionStateWiFi`: The device is connected to the Internet via WiFi.
+>> `ITDeviceConnectionStateDisconnected`: The device is not connected to the Internet.
+
+**ITDeviceOrientation**
+
+> The physical orientation of the device.
+
+    typedef enum
+    {
+        ITDeviceOrientationUnknown,
+        ITDeviceOrientationPortrait,
+        ITDeviceOrientationPortraitUpsideDown,
+        ITDeviceOrientationLandscapeLeft,
+        ITDeviceOrientationLandscapeRight,
+        ITDeviceOrientationFaceUp,
+        ITDeviceOrientationFaceDown
+    } ITDeviceOrientation;
+    
+> *Constants*
+
+>> `ITDeviceOrientationUnknown`: The orientation of the device cannot be determined.
+>> `ITDeviceOrientationPortrait`: The device is in portrait mode, with the device held upright.
+>> `ITDeviceOrientationPortraitUpsideDown`: The device is in portrait mode but upside down.
+>> `ITDeviceOrientationLandscapeLeft`: The device is in landscape mode, turned counter-clockwise from portrait.
+>> `ITDeviceOrientationLandscapeRight`: The device is in landscape mode, turn clockwise from portrait.
+>> `ITDeviceOrientationFaceUp`: The device is held parallel to the ground with the screen facing upwards.
+>> `ITDeviceOrientationFaceDown`: The device is held parallel to the ground with the screen facing downwards.
+
+**ITUserInterfaceIdiom**
+
+> The type of interface that should be used on the current device.
+
+    typedef enum
+    {
+        ITUserInterfaceIdiomPhone,
+        ITUserInterfaceIdiomPad,
+        ITUserInterfaceIdiomDesktop
+    } ITUserInterfaceIdiom;
+
+> *Constants*
+
+>> `ITUserInterfaceIdiomPhone`: The user interface should be designed for the iPhone and iPod Touch.
+>> `ITUserInterfaceIdiomPad`: The user interface should be designed for the iPad.
+>> `ITUserInterfaceIdiomDesktop`: The user interface should be designed for Mac OS X.
+
+**ITDeviceOrientationIsPortrait**
+
+> Returns `YES` if the given orientation is portrait, upside down or otherwise.
+
+    #define ITDeviceOrientationIsPortrait(orientation) (orientation == ITDeviceOrientationPortrait || orientation == ITDeviceOrientationPortraitUpsideDown)
+
+**ITDeviceOrientationIsLandscape**
+
+> Returns `YES` if the given orientation is either landscape left or landscape right.
+
+    #define ITDeviceOrientationIsLandscape(orientation) (orientation == ITDeviceOrientationLandscapeLeft || orientation == ITDeviceOrientationLandscapeRight)
+
+##Notifications##
+
+**ITDeviceBatteryLevelDidChangeNotification**
+
+> Posted when the battery level changes. For this notification to be sent, you must set the `batteryMonitoryingEnabled` property to `YES`.
+> Notifications for battery level change are sent no more frequently than once per minute.
+
+**ITDeviceBatteryStateDidChangeNotification**
+
+> Posted when the battery state changes. For this notification to be sent, you must set the `batteryMonitoringEnabled` property to `YES`.
+> Notifications for battery state change are sent no more frequently than once per minute.
+
+**ITDeviceConnectionStateDidChangeNotification**
+
+> Posted when the connection state changes.
+> Notifications for connection state change are sent no more frequently than once per minute.
+
+**ITDeviceOrientationDidChangeNotification**
+
+> Posted when the orientation of the device changes.
+> This notification will never be posted on the Mac OS X platform.
+
 #License#
 
 License Agreement for Source Code provided by Inspyre Technologies

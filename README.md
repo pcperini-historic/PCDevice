@@ -84,6 +84,35 @@ More documentation will be added when possible.
 >> The value for `batteryState` is one of the constants in `ITDeviceBatteryState`.
 >> If battery monitoring is not enabled, the value of this property is `ITDeviceBatteryStateUnknown`.
 
+**generatesDeviceOrientationNotifications**
+
+> A Boolean value that indicates whether the receiver generates orientation notifications (`YES`) or not (`NO`).
+
+    @property (nonatomic, getter = isGeneratingDeviceOrientationNotifications) BOOL generatesDeviceOrientationNotifications
+
+> *Discussion*
+
+>> If the value of this property is `YES`, the shared `ITDevice` object posts an `ITDeviceOrientationDidChangeNotification` notification when the device changes orientation.
+>> If the value is `NO`, it generates no orientation notifications. This property has no effect in the Mac OS X environment.
+
+**model**
+
+> The model of the device.
+
+    @property (nonatomic, readonly, retain) NSString *model
+    
+**multitaskingSupported**
+
+> A Boolean value indicating whether multitasking is supported on the current device.
+
+    @property (nonatomic, readonly, getter = isMultitaskingSupported) BOOL multitaskingSupported
+    
+**name**
+
+> The name identifying the device.
+
+    @property (nonatomic, readonly, retain) NSString *name
+
 #License#
 
 License Agreement for Source Code provided by Inspyre Technologies

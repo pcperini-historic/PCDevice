@@ -153,6 +153,17 @@ More documentation will be added when possible.
 
     @property (nonatomic, readonly, retain) NSString *systemVersion
     
+**uniqueIdentifier**
+
+> An alphanumeric string unique to each device with regard to your app.
+
+    @property (nonatomic, readonly, retain) NSString *uniqueIdentifier
+    
+> *Discussion*
+
+>> Because this method does not rely on the deprecated `uniqueIdentifier` property of `UIDevice`, it is safe to use.
+>> This property uses the `CFUUIDCreate` function to create a UUID, and writes it to the `defaults` database using the `NSUserDefaults` class.
+    
 **userInterfaceIdiom**
 
 > The style of interface to use on the current device.
@@ -162,6 +173,18 @@ More documentation will be added when possible.
 > *Discussion*
 
 >> For universal applications and cross-compiling applications, you can use this property to tailor the behavior of your application for a specific type of device.
+
+##Class Methods##
+
+**currentDevice**
+
+> Returns an object representing the current device.
+
+    + (ITDevice *)currentDevice
+    
+> *Return Value:*
+
+>> A singleton object that represents the current device.
 
 #License#
 

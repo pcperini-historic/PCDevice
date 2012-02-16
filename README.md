@@ -112,6 +112,40 @@ More documentation will be added when possible.
 > The name identifying the device.
 
     @property (nonatomic, readonly, retain) NSString *name
+    
+**orientation**
+
+> Returns the physical orientation of the device.
+
+    @property (nonatomic, readonly) ITDeviceOrientation orientation
+    
+> *Discussion*
+
+>> The value of the property is constant that indicates the current orientation of the device. This value represents the physical orientation of the device and may be different from the current orientation of your application's user interface. See `ITDeviceOrientation` for descriptions of the possible values.
+>> The value of this property always returns `ITDeviceOrientationUnknown` unless orentation notifications have been enabled by setting `generatesDeviceOrientationNotifications` to `YES`.
+>> The value of this property always returns `ITDeviceOrientationPortrait` on the Mac OS X platform.
+
+**systemName**
+
+> The name of the operating system running on the device represented by the receiver.
+
+    @property (nonatomic, readonly, retain) NSString *systemName
+    
+**systemVersion**
+
+> The current version of the operating system.
+
+    @property (nonatomic, readonly, retain) NSString *systemVersion
+    
+**userInterfaceIdiom**
+
+> The style of interface to use on the current device.
+
+    @property (nonatomic, readonly) ITUserInterfaceIdiom userInterfaceIdiom
+    
+> *Discussion*
+
+>> For universal applications and cross-compiling applications, you can use this property to tailor the behavior of your application for a specific type of device.
 
 #License#
 

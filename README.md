@@ -208,10 +208,10 @@ More documentation will be added when possible.
 
 > *Constants*
 
->> `ITDeviceBatteryStateUnknown`: The battery state for the device cannot be determined.
->> `ITDeviceBatteryStateUnplugged`: The device is not plugged into power; the battery is discharging.
->> `ITDeviceBatteryStateCharging`: The device is plugged into power and the battery is less that 100% charged.
->> `ITDeviceBatteryStateFull`: The device is plugged into power and the battery is 100% charged.
+>> - `ITDeviceBatteryStateUnknown`: The battery state for the device cannot be determined.
+>> - `ITDeviceBatteryStateUnplugged`: The device is not plugged into power; the battery is discharging.
+>> - `ITDeviceBatteryStateCharging`: The device is plugged into power and the battery is less that 100% charged.
+>> - `ITDeviceBatteryStateFull`: The device is plugged into power and the battery is 100% charged.
 
 **ITDeviceConnectionState**
 
@@ -227,10 +227,10 @@ More documentation will be added when possible.
 
 > *Constants*
 
->> `ITDeviceConnectionStateUnknown`: The connection state for the device cannot be determined.
->> `ITDeviceConnectionStateMobile`: The device is connected to the Internet via a mobile provider.
->> `ITDeviceConnectionStateWiFi`: The device is connected to the Internet via WiFi.
->> `ITDeviceConnectionStateDisconnected`: The device is not connected to the Internet.
+>> - `ITDeviceConnectionStateUnknown`: The connection state for the device cannot be determined.
+>> - `ITDeviceConnectionStateMobile`: The device is connected to the Internet via a mobile provider.
+>> - `ITDeviceConnectionStateWiFi`: The device is connected to the Internet via WiFi.
+>> - `ITDeviceConnectionStateDisconnected`: The device is not connected to the Internet.
 
 **ITDeviceOrientation**
 
@@ -249,13 +249,13 @@ More documentation will be added when possible.
     
 > *Constants*
 
->> `ITDeviceOrientationUnknown`: The orientation of the device cannot be determined.
->> `ITDeviceOrientationPortrait`: The device is in portrait mode, with the device held upright.
->> `ITDeviceOrientationPortraitUpsideDown`: The device is in portrait mode but upside down.
->> `ITDeviceOrientationLandscapeLeft`: The device is in landscape mode, turned counter-clockwise from portrait.
->> `ITDeviceOrientationLandscapeRight`: The device is in landscape mode, turn clockwise from portrait.
->> `ITDeviceOrientationFaceUp`: The device is held parallel to the ground with the screen facing upwards.
->> `ITDeviceOrientationFaceDown`: The device is held parallel to the ground with the screen facing downwards.
+>> - `ITDeviceOrientationUnknown`: The orientation of the device cannot be determined.
+>> - `ITDeviceOrientationPortrait`: The device is in portrait mode, with the device held upright.
+>> - `ITDeviceOrientationPortraitUpsideDown`: The device is in portrait mode but upside down.
+>> - `ITDeviceOrientationLandscapeLeft`: The device is in landscape mode, turned counter-clockwise from portrait.
+>> - `ITDeviceOrientationLandscapeRight`: The device is in landscape mode, turn clockwise from portrait.
+>> - `ITDeviceOrientationFaceUp`: The device is held parallel to the ground with the screen facing upwards.
+>> - `ITDeviceOrientationFaceDown`: The device is held parallel to the ground with the screen facing downwards.
 
 **ITUserInterfaceIdiom**
 
@@ -270,9 +270,9 @@ More documentation will be added when possible.
 
 > *Constants*
 
->> `ITUserInterfaceIdiomPhone`: The user interface should be designed for the iPhone and iPod Touch.
->> `ITUserInterfaceIdiomPad`: The user interface should be designed for the iPad.
->> `ITUserInterfaceIdiomDesktop`: The user interface should be designed for Mac OS X.
+>> - `ITUserInterfaceIdiomPhone`: The user interface should be designed for the iPhone and iPod Touch.
+>> - `ITUserInterfaceIdiomPad`: The user interface should be designed for the iPad.
+>> - `ITUserInterfaceIdiomDesktop`: The user interface should be designed for Mac OS X.
 
 **ITDeviceOrientationIsPortrait**
 

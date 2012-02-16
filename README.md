@@ -59,6 +59,31 @@ More documentation will be added when possible.
 >> Battery level ranges from 0.0 (fully discharged) to 1.0 (100% charged). Before accessing this property, ensure that battery monitoring is enabled.
 >> If battery monitoring is not enabled, battery state is `ITDeviceBatteryStateUnknown` and the value of this property is -1.0.
     
+**batteryMonitoringEnabled**
+
+> A Boolean value indicating whether battery monitoring is enabled (`YES`) or not (`NO`).
+
+    @property(nonatomic, getter = isBatteryMonitoringEnabled) BOOL batteryMonitoringEnabled
+    
+> *Discussion*
+
+>> Enable battery monitoring if you need to be notified of changes to the battery state, or if you want to check the battery charge level.
+>> The default value of this property is `NO`, which:
+
+>> - Disables the posting of battery-related notifications
+>> - Disables the ability to read battery charge level and battery state
+
+**batteryState**
+
+> The battery state for the device.
+
+    @property(nonatomic, readonly) ITDeviceBatteryState batteryState
+    
+> *Discussion*
+
+>> The value for `batteryState` is one of the constants in `ITDeviceBatteryState`.
+>> If battery monitoring is not enabled, the value of this property is `ITDeviceBatteryStateUnknown`.
+
 #License#
 
 License Agreement for Source Code provided by Inspyre Technologies

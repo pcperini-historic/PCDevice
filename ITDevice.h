@@ -95,6 +95,8 @@ typedef enum
 @property (nonatomic, getter = isGeneratingDeviceOrientationNotifications) BOOL generatesDeviceOrientationNotifications;
 #pragma mark ... ... ... Multitasking Information
 @property (nonatomic, readonly, getter = isMultitaskingSupported)          BOOL multitaskingSupported;
+#pragma mark ... ... ... Push Notification Information
+@property (nonatomic, readonly, getter = arePushNotificationsSupported)    BOOL pushNotificationsSupported;
 #pragma mark ... ... ... Batter Information
 @property (nonatomic, readonly)                                            float batteryLevel;
 @property (nonatomic, getter = isBatteryMonitoringEnabled)                 BOOL batteryMonitoringEnabled;

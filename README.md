@@ -24,7 +24,8 @@ More documentation will be added when possible.
     ITCurrentDevice
 
 ###Determining Available Features###
-    multitaskingSupported (property)
+    multitaskingSupported      (property)
+    pushNotificationsSupported (property)
 
 ###Identifying the Device and Operating System###
     name             (property)
@@ -140,6 +141,12 @@ More documentation will be added when possible.
 >> The value of the property is constant that indicates the current orientation of the device. This value represents the physical orientation of the device and may be different from the current orientation of your application's user interface. See `ITDeviceOrientation` for descriptions of the possible values.
 >> The value of this property always returns `ITDeviceOrientationUnknown` unless orentation notifications have been enabled by setting `generatesDeviceOrientationNotifications` to `YES`.
 >> The value of this property always returns `ITDeviceOrientationPortrait` on the Mac OS X platform.
+
+**pushNotificationsSupported**
+
+> A Boolean value indicating whether push notifications are supported on the current device.
+
+    @property (nonatomic, readonly, getter = arePushNotificationsSupported) BOOL pushNotificationsSupported
 
 **systemName**
 

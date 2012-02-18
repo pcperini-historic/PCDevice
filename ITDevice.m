@@ -319,6 +319,16 @@ char     *const ITDeviceConnectionExternalHostAddress = "www.google.com";
     #endif
 }
 
+#pragma mark ... ... ... Push Notification Methods
+- (BOOL)arePushNotificationsSupported
+{
+    #if TARGET_OS_IPHONE
+        return [[UIApplication sharedApplication] respondsToSelector: @selector(registerForRemoteNotificationTypes:)];
+    #else
+        return [[NSApplication sharedApplication] respondsToSelector: @selector(registerForRemoteNotificationTypes:)];
+    #endif
+}
+
 #pragma mark ... ... ... Battery Methods
 - (float)batteryLevel
 {

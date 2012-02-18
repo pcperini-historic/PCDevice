@@ -9,7 +9,7 @@ Declared In:      ITDevice.h
 
 ##Overview##
 
-The `ITDevice` class provides a singleton instance representing the current device. From this instance you can obtain information about the device such as assigned name, device model, and operating-system name and version.
+The `ITDevice` class provides a singleton instance representing the current device running either iOS or Mac OS X. From this instance you can obtain information about the device such as assigned name, device model, and operating-system name and version.
 
 You also use the `ITDevice` instance to detect changes in the device’s characteristics, such as physical orientation. You get the current orientation using the orientation property or receive change notifications by registering for the `ITDeviceOrientationDidChangeNotification` notification. Before using either of these techniques to get orientation data, you must enable data delivery by setting the `generatesDeviceOrientationNotifications` property to `YES`. When you no longer need to track the device orientation, set the `generatesDeviceOrientationNotifications` property to `NO` to disable the delivery of notifications.
 

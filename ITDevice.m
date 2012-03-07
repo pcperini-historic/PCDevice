@@ -329,6 +329,19 @@ char     *const ITDeviceConnectionExternalHostAddress = "www.google.com";
     #endif
 }
 
+#pragma mark ... ... ... iCloud Synchronization Information
+- (BOOL)isiCloudKeyValSyncSupported
+{
+    return NSClassFromString(@"NSUbiquitousKeyValueStore") &&
+           [NSUbiquitousKeyValueStore defaultStore];
+}
+
+- (BOOL)isiCloudFileSyncSupported
+{
+    return [[NSFileManager defaultManager] respondsToSelector: @selector(URLForUbiquityContainerIdentifier:)] &&
+           [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier: nil];
+}
+
 #pragma mark ... ... ... Battery Methods
 - (float)batteryLevel
 {

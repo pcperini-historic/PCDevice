@@ -26,6 +26,8 @@ More documentation will be added when possible.
 ###Determining Available Features###
     multitaskingSupported      (property)
     pushNotificationsSupported (property)
+    iCloudKeyValSyncSupported  (property)
+    iCloudFileSyncSupported    (property)
 
 ###Identifying the Device and Operating System###
     name             (property)
@@ -111,6 +113,18 @@ More documentation will be added when possible.
 
 >> If the value of this property is `YES`, the shared `ITDevice` object posts an `ITDeviceOrientationDidChangeNotification` notification when the device changes orientation.
 >> If the value is `NO`, it generates no orientation notifications. This property has no effect in the Mac OS X environment.
+    
+**iCloudKeyValSyncSupported**
+
+> A Boolean value indicating whether iCloud key-value synchronization is supported on the current device.
+
+    @property (nonatomic, readonly, getter = isiCloudKeyValSyncSupported) BOOL iCloudKeyValSyncSupported
+    
+**iCloudFileSyncSupported**
+
+> A Boolean value indicating whether iCloud file synchronization is supported and configured on the current device.
+
+    @property (nonatomic, readonly, getter = isiCloudFileSyncSupported) BOOL iCloudFileSyncSupported
 
 **model**
 

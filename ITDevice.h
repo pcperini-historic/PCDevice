@@ -97,6 +97,9 @@ typedef enum
 @property (nonatomic, readonly, getter = isMultitaskingSupported)          BOOL multitaskingSupported;
 #pragma mark ... ... ... Push Notification Information
 @property (nonatomic, readonly, getter = arePushNotificationsSupported)    BOOL pushNotificationsSupported;
+#pragma mark ... ... ... iCloud Synchronization Information
+@property (nonatomic, readonly, getter = isiCloudKeyValSyncSupported)      BOOL iCloudKeyValSyncSupported;
+@property (nonatomic, readonly, getter = isiCloudFileSyncSupported)        BOOL iCloudFileSyncSupported;
 #pragma mark ... ... ... Batter Information
 @property (nonatomic, readonly)                                            float batteryLevel;
 @property (nonatomic, getter = isBatteryMonitoringEnabled)                 BOOL batteryMonitoringEnabled;

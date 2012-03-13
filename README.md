@@ -15,8 +15,6 @@ You also use the `ITDevice` instance to detect changes in the device’s charact
 
 Similarly, you can use the `ITDevice` instance to obtain information and notifications about changes to the battery’s charge state (described by the `batteryState` property) and charge level (described by the `batteryLevel` property). The `ITDevice` instance also provides access to the network connection state (described by the `connectionState` property). The network connection state represents the availability of Internet communication and whether the device is connected via a mobile data connection. Enable battery monitoring or connection monitoring only when you need it.
 
-More documentation will be added when possible.
-
 ##Tasks##
 
 ###Getting the Shared Device Instance###

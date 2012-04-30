@@ -1,25 +1,25 @@
-#ITDevice#
+#PCDevice#
 
 
 
 Inherits From:    NSObject
 
-Declared In:      ITDevice.h
+Declared In:      PCDevice.h
 
 
 ##Overview##
 
-The `ITDevice` class provides a singleton instance representing the current device running either iOS or Mac OS X. From this instance you can obtain information about the device such as assigned name, device model, and operating-system name and version.
+The `PCDevice` class provides a singleton instance representing the current device running either iOS or Mac OS X. From this instance you can obtain information about the device such as assigned name, device model, and operating-system name and version.
 
-You also use the `ITDevice` instance to detect changes in the device’s characteristics, such as physical orientation. You get the current orientation using the orientation property or receive change notifications by registering for the `ITDeviceOrientationDidChangeNotification` notification. Before using either of these techniques to get orientation data, you must enable data delivery by setting the `generatesDeviceOrientationNotifications` property to `YES`. When you no longer need to track the device orientation, set the `generatesDeviceOrientationNotifications` property to `NO` to disable the delivery of notifications.
+You also use the `PCDevice` instance to detect changes in the device’s characteristics, such as physical orientation. You get the current orientation using the orientation property or receive change notifications by registering for the `PCDeviceOrientationDidChangeNotification` notification. Before using either of these techniques to get orientation data, you must enable data delivery by setting the `generatesDeviceOrientationNotifications` property to `YES`. When you no longer need to track the device orientation, set the `generatesDeviceOrientationNotifications` property to `NO` to disable the delivery of notifications.
 
-Similarly, you can use the `ITDevice` instance to obtain information and notifications about changes to the battery’s charge state (described by the `batteryState` property) and charge level (described by the `batteryLevel` property). The `ITDevice` instance also provides access to the network connection state (described by the `connectionState` property). The network connection state represents the availability of Internet communication and whether the device is connected via a mobile data connection. Enable battery monitoring or connection monitoring only when you need it.
+Similarly, you can use the `PCDevice` instance to obtain information and notifications about changes to the battery’s charge state (described by the `batteryState` property) and charge level (described by the `batteryLevel` property). The `PCDevice` instance also provides access to the network connection state (described by the `connectionState` property). The network connection state represents the availability of Internet communication and whether the device is connected via a mobile data connection. Enable battery monitoring or connection monitoring only when you need PC.
 
 ##Tasks##
 
 ###Getting the Shared Device Instance###
     + currentDevice
-    ITCurrentDevice
+    PCCurrentDevice
 
 ###Determining Available Features###
     multitaskingSupported      (property)
@@ -58,7 +58,7 @@ Similarly, you can use the `ITDevice` instance to obtain information and notific
 > *Discussion*
 
 >> Battery level ranges from 0.0 (fully discharged) to 1.0 (100% charged). Before accessing this property, ensure that battery monitoring is enabled.
->> If battery monitoring is not enabled, battery state is `ITDeviceBatteryStateUnknown` and the value of this property is -1.0.
+>> If battery monitoring is not enabled, battery state is `PCDeviceBatteryStateUnknown` and the value of this property is -1.0.
     
 **batteryMonitoringEnabled**
 
@@ -78,22 +78,22 @@ Similarly, you can use the `ITDevice` instance to obtain information and notific
 
 > The battery state for the device.
 
-    @property(nonatomic, readonly) ITDeviceBatteryState batteryState
+    @property(nonatomic, readonly) PCDeviceBatteryState batteryState
     
 > *Discussion*
 
->> The value for `batteryState` is one of the constants in `ITDeviceBatteryState`.
->> If battery monitoring is not enabled, the value of this property is `ITDeviceBatteryStateUnknown`.
+>> The value for `batteryState` is one of the constants in `PCDeviceBatteryState`.
+>> If battery monitoring is not enabled, the value of this property is `PCDeviceBatteryStateUnknown`.
 
 **connectionState**
 
 > The network connection state for the device.
 
-    @property (nonatomic, readonly) ITDeviceConnectionState connectionState
+    @property (nonatomic, readonly) PCDeviceConnectionState connectionState
     
 > *Discussion*
 
->> The value for `connectionState` be `ITDeviceConnectionStateUknown` if some error occurrs, and `ITDeviceConnectionStateDisconnected` if Internet is unreachable.
+>> The value for `connectionState` be `PCDeviceConnectionStateUknown` if some error occurrs, and `PCDeviceConnectionStateDisconnected` if Internet is unreachable.
 
 **generatesConnectionStateNotifications**
 
@@ -109,8 +109,8 @@ Similarly, you can use the `ITDevice` instance to obtain information and notific
 
 > *Discussion*
 
->> If the value of this property is `YES`, the shared `ITDevice` object posts an `ITDeviceOrientationDidChangeNotification` notification when the device changes orientation.
->> If the value is `NO`, it generates no orientation notifications. This property has no effect in the Mac OS X environment.
+>> If the value of this property is `YES`, the shared `PCDevice` object posts an `PCDeviceOrientationDidChangeNotification` notification when the device changes orientation.
+>> If the value is `NO`, PC generates no orientation notifications. This property has no effect in the Mac OS X environment.
     
 **iCloudKeyValSyncSupported**
 
@@ -146,13 +146,13 @@ Similarly, you can use the `ITDevice` instance to obtain information and notific
 
 > Returns the physical orientation of the device.
 
-    @property (nonatomic, readonly) ITDeviceOrientation orientation
+    @property (nonatomic, readonly) PCDeviceOrientation orientation
     
 > *Discussion*
 
->> The value of the property is constant that indicates the current orientation of the device. This value represents the physical orientation of the device and may be different from the current orientation of your application's user interface. See `ITDeviceOrientation` for descriptions of the possible values.
->> The value of this property always returns `ITDeviceOrientationUnknown` unless orentation notifications have been enabled by setting `generatesDeviceOrientationNotifications` to `YES`.
->> The value of this property always returns `ITDeviceOrientationPortrait` on the Mac OS X platform.
+>> The value of the property is constant that indicates the current orientation of the device. This value represents the physical orientation of the device and may be different from the current orientation of your application's user interface. See `PCDeviceOrientation` for descriptions of the possible values.
+>> The value of this property always returns `PCDeviceOrientationUnknown` unless orentation notifications have been enabled by setting `generatesDeviceOrientationNotifications` to `YES`.
+>> The value of this property always returns `PCDeviceOrientationPortrait` on the Mac OS X platform.
 
 **pushNotificationsSupported**
 
@@ -180,14 +180,14 @@ Similarly, you can use the `ITDevice` instance to obtain information and notific
     
 > *Discussion*
 
->> Because this method does not rely on the deprecated `uniqueIdentifier` property of `UIDevice`, it is safe to use.
->> This property uses the `CFUUIDCreate` function to create a UUID, and writes it to the `defaults` database using the `NSUserDefaults` class.
+>> Because this method does not rely on the deprecated `uniqueIdentifier` property of `UIDevice`, PC is safe to use.
+>> This property uses the `CFUUIDCreate` function to create a UUID, and writes PC to the `defaults` database using the `NSUserDefaults` class.
     
 **userInterfaceIdiom**
 
 > The style of interface to use on the current device.
 
-    @property (nonatomic, readonly) ITUserInterfaceIdiom userInterfaceIdiom
+    @property (nonatomic, readonly) PCUserInterfaceIdiom userInterfaceIdiom
     
 > *Discussion*
 
@@ -199,7 +199,7 @@ Similarly, you can use the `ITDevice` instance to obtain information and notific
 
 > Returns an object representing the current device.
 
-    + (ITDevice *)currentDevice
+    + (PCDevice *)currentDevice
     
 > *Return Value:*
 
@@ -207,134 +207,134 @@ Similarly, you can use the `ITDevice` instance to obtain information and notific
 
 ##Constants and Macros##
 
-**ITCurrentDevice**
+**PCCurrentDevice**
 
 > Returns the shared object representing the current device.
 
-    #define ITCurrentDevice [ITDevice currentDevice]
+    #define PCCurrentDevice [PCDevice currentDevice]
     
-**ITDeviceBatteryState**
+**PCDeviceBatteryState**
 
 > The battery power state of the device
 
     typedef enum
     {
-        ITDeviceBatteryStateUnknown,
-        ITDeviceBatteryStateUnplugged,
-        ITDeviceBatteryStateCharging,
-        ITDeviceBatteryStateFull
-    } ITDeviceBatteryState;
+        PCDeviceBatteryStateUnknown,
+        PCDeviceBatteryStateUnplugged,
+        PCDeviceBatteryStateCharging,
+        PCDeviceBatteryStateFull
+    } PCDeviceBatteryState;
 
 > *Constants*
 
->> - `ITDeviceBatteryStateUnknown`: The battery state for the device cannot be determined.
->> - `ITDeviceBatteryStateUnplugged`: The device is not plugged into power; the battery is discharging.
->> - `ITDeviceBatteryStateCharging`: The device is plugged into power and the battery is less that 100% charged.
->> - `ITDeviceBatteryStateFull`: The device is plugged into power and the battery is 100% charged.
+>> - `PCDeviceBatteryStateUnknown`: The battery state for the device cannot be determined.
+>> - `PCDeviceBatteryStateUnplugged`: The device is not plugged into power; the battery is discharging.
+>> - `PCDeviceBatteryStateCharging`: The device is plugged into power and the battery is less that 100% charged.
+>> - `PCDeviceBatteryStateFull`: The device is plugged into power and the battery is 100% charged.
 
-**ITDeviceConnectionState**
+**PCDeviceConnectionState**
 
 > The network connection state of the device.
 
     typedef enum
     {
-        ITDeviceConnectionStateUnknown,
-        ITDeviceConnectionStateMobile,
-        ITDeviceConnectionStateWiFi,
-        ITDeviceConnectionStateDisconnected
-    } ITDeviceConnectionState;
+        PCDeviceConnectionStateUnknown,
+        PCDeviceConnectionStateMobile,
+        PCDeviceConnectionStateWiFi,
+        PCDeviceConnectionStateDisconnected
+    } PCDeviceConnectionState;
 
 > *Constants*
 
->> - `ITDeviceConnectionStateUnknown`: The connection state for the device cannot be determined.
->> - `ITDeviceConnectionStateMobile`: The device is connected to the Internet via a mobile provider.
->> - `ITDeviceConnectionStateWiFi`: The device is connected to the Internet via WiFi.
->> - `ITDeviceConnectionStateDisconnected`: The device is not connected to the Internet.
+>> - `PCDeviceConnectionStateUnknown`: The connection state for the device cannot be determined.
+>> - `PCDeviceConnectionStateMobile`: The device is connected to the Internet via a mobile provider.
+>> - `PCDeviceConnectionStateWiFi`: The device is connected to the Internet via WiFi.
+>> - `PCDeviceConnectionStateDisconnected`: The device is not connected to the Internet.
 
-**ITDeviceOrientation**
+**PCDeviceOrientation**
 
 > The physical orientation of the device.
 
     typedef enum
     {
-        ITDeviceOrientationUnknown,
-        ITDeviceOrientationPortrait,
-        ITDeviceOrientationPortraitUpsideDown,
-        ITDeviceOrientationLandscapeLeft,
-        ITDeviceOrientationLandscapeRight,
-        ITDeviceOrientationFaceUp,
-        ITDeviceOrientationFaceDown
-    } ITDeviceOrientation;
+        PCDeviceOrientationUnknown,
+        PCDeviceOrientationPortrait,
+        PCDeviceOrientationPortraitUpsideDown,
+        PCDeviceOrientationLandscapeLeft,
+        PCDeviceOrientationLandscapeRight,
+        PCDeviceOrientationFaceUp,
+        PCDeviceOrientationFaceDown
+    } PCDeviceOrientation;
     
 > *Constants*
 
->> - `ITDeviceOrientationUnknown`: The orientation of the device cannot be determined.
->> - `ITDeviceOrientationPortrait`: The device is in portrait mode, with the device held upright.
->> - `ITDeviceOrientationPortraitUpsideDown`: The device is in portrait mode but upside down.
->> - `ITDeviceOrientationLandscapeLeft`: The device is in landscape mode, turned counter-clockwise from portrait.
->> - `ITDeviceOrientationLandscapeRight`: The device is in landscape mode, turn clockwise from portrait.
->> - `ITDeviceOrientationFaceUp`: The device is held parallel to the ground with the screen facing upwards.
->> - `ITDeviceOrientationFaceDown`: The device is held parallel to the ground with the screen facing downwards.
+>> - `PCDeviceOrientationUnknown`: The orientation of the device cannot be determined.
+>> - `PCDeviceOrientationPortrait`: The device is in portrait mode, with the device held upright.
+>> - `PCDeviceOrientationPortraitUpsideDown`: The device is in portrait mode but upside down.
+>> - `PCDeviceOrientationLandscapeLeft`: The device is in landscape mode, turned counter-clockwise from portrait.
+>> - `PCDeviceOrientationLandscapeRight`: The device is in landscape mode, turn clockwise from portrait.
+>> - `PCDeviceOrientationFaceUp`: The device is held parallel to the ground with the screen facing upwards.
+>> - `PCDeviceOrientationFaceDown`: The device is held parallel to the ground with the screen facing downwards.
 
-**ITUserInterfaceIdiom**
+**PCUserInterfaceIdiom**
 
 > The type of interface that should be used on the current device.
 
     typedef enum
     {
-        ITUserInterfaceIdiomPhone,
-        ITUserInterfaceIdiomPad,
-        ITUserInterfaceIdiomDesktop
-    } ITUserInterfaceIdiom;
+        PCUserInterfaceIdiomPhone,
+        PCUserInterfaceIdiomPad,
+        PCUserInterfaceIdiomDesktop
+    } PCUserInterfaceIdiom;
 
 > *Constants*
 
->> - `ITUserInterfaceIdiomPhone`: The user interface should be designed for the iPhone and iPod Touch.
->> - `ITUserInterfaceIdiomPad`: The user interface should be designed for the iPad.
->> - `ITUserInterfaceIdiomDesktop`: The user interface should be designed for Mac OS X.
+>> - `PCUserInterfaceIdiomPhone`: The user interface should be designed for the iPhone and iPod Touch.
+>> - `PCUserInterfaceIdiomPad`: The user interface should be designed for the iPad.
+>> - `PCUserInterfaceIdiomDesktop`: The user interface should be designed for Mac OS X.
 
-**ITDeviceOrientationIsPortrait**
+**PCDeviceOrientationIsPortrait**
 
 > Returns `YES` if the given orientation is portrait, upside down or otherwise.
 
-    #define ITDeviceOrientationIsPortrait(orientation) (orientation == ITDeviceOrientationPortrait || orientation == ITDeviceOrientationPortraitUpsideDown)
+    #define PCDeviceOrientationIsPortrait(orientation) (orientation == PCDeviceOrientationPortrait || orientation == PCDeviceOrientationPortraitUpsideDown)
 
-**ITDeviceOrientationIsLandscape**
+**PCDeviceOrientationIsLandscape**
 
 > Returns `YES` if the given orientation is either landscape left or landscape right.
 
-    #define ITDeviceOrientationIsLandscape(orientation) (orientation == ITDeviceOrientationLandscapeLeft || orientation == ITDeviceOrientationLandscapeRight)
+    #define PCDeviceOrientationIsLandscape(orientation) (orientation == PCDeviceOrientationLandscapeLeft || orientation == PCDeviceOrientationLandscapeRight)
 
 ##Notifications##
 
-**ITDeviceBatteryLevelDidChangeNotification**
+**PCDeviceBatteryLevelDidChangeNotification**
 
 > Posted when the battery level changes. For this notification to be sent, you must set the `batteryMonitoryingEnabled` property to `YES`.
 > Notifications for battery level change are sent no more frequently than once per minute.
 
-**ITDeviceBatteryStateDidChangeNotification**
+**PCDeviceBatteryStateDidChangeNotification**
 
 > Posted when the battery state changes. For this notification to be sent, you must set the `batteryMonitoringEnabled` property to `YES`.
 > Notifications for battery state change are sent no more frequently than once per minute.
 
-**ITDeviceConnectionStateDidChangeNotification**
+**PCDeviceConnectionStateDidChangeNotification**
 
 > Posted when the connection state changes.
 > Notifications for connection state change are sent no more frequently than once per minute.
 
-**ITDeviceOrientationDidChangeNotification**
+**PCDeviceOrientationDidChangeNotification**
 
 > Posted when the orientation of the device changes.
 > This notification will never be posted on the Mac OS X platform.
 
 #License#
 
-License Agreement for Source Code provided by Inspyre Technologies
+License Agreement for Source Code provided by Patrick Perini
 
-This software is supplied to you by Inspyre Technologies in consideration of your agreement to the following terms, and your use, installation, modification or redistribution of this software constitutes acceptance of these terms. If you do not agree with these terms, please do not use, install, modify or redistribute this software.
+This software is supplied to you by Patrick Perini in consideration of your agreement to the following terms, and your use, installation, modification or redistribution of this software constitutes acceptance of these terms. If you do not agree with these terms, please do not use, install, modify or redistribute this software.
 
-In consideration of your agreement to abide by the following terms, and subject to these terms, Inspyre Technologies grants you a personal, non-exclusive license, to use, reproduce, modify and redistribute the software, with or without modifications, in source and/or binary forms; provided that if you redistribute the software in its entirety and without modifications, you must retain this notice and the following text and disclaimers in all such redistributions of the software, and that in all cases attribution of Inspyre Technologies as the original author of the source code shall be included in all such resulting software products or distributions. Neither the name, trademarks, service marks or logos of Inspyre Technologies may be used to endorse or promote products derived from the software without specific prior written permission from Inspyre Technologies. Except as expressly stated in this notice, no other rights or licenses, express or implied, are granted by Inspyre Technologies herein, including but not limited to any patent rights that may be infringed by your derivative works or by other works in which the software may be incorporated.
+In consideration of your agreement to abide by the following terms, and subject to these terms, Patrick Perini grants you a personal, non-exclusive license, to use, reproduce, modify and redistribute the software, with or without modifications, in source and/or binary forms; provided that if you redistribute the software in PCs entirety and without modifications, you must retain this notice and the following text and disclaimers in all such redistributions of the software, and that in all cases attribution of Patrick Perini as the original author of the source code shall be included in all such resulting software products or distributions. Neither the name, trademarks, service marks or logos of Patrick Perini may be used to endorse or promote products derived from the software without specific prior written permission from Patrick Perini. Except as expressly stated in this notice, no other rights or licenses, express or implied, are granted by Patrick Perini herein, including but not limited to any patent rights that may be infringed by your derivative works or by other works in which the software may be incorporated.
 
-The software is provided by Inspyre Technologies on an "AS IS" basis. Inspyre Technologies MAKES NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, REGARDING THE SOFTWARE OR ITS USE AND OPERATION ALONE OR IN COMBINATION WITH YOUR PRODUCTS.
+The software is provided by Patrick Perini on an "AS IS" basis. Patrick Perini MAKES NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, REGARDING THE SOFTWARE OR PCS USE AND OPERATION ALONE OR IN COMBINATION WITH YOUR PRODUCTS.
 
-IN NO EVENT SHALL Inspyre Technologies BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION, MODIFICATION AND/OR DISTRIBUTION OF THE SOFTWARE, HOWEVER CAUSED AND WHETHER UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY OR OTHERWISE, EVEN IF Inspyre Technologies HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+IN NO EVENT SHALL Patrick Perini BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION, MODIFICATION AND/OR DISTRIBUTION OF THE SOFTWARE, HOWEVER CAUSED AND WHETHER UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY OR OTHERWISE, EVEN IF Patrick Perini HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.

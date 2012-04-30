@@ -1,33 +1,33 @@
 //
-//  ITDevice.m
-//  ITDevice
+//  PCDevice.m
+//  PCDevice
 //
 //  Created by Patrick Perini on 2/14/12.
 //  Licensing information availabe in README.md
 //
 
-#import "ITDevice.h"
+#import "PCDevice.h"
 
 #pragma mark - Global Constants
-NSString *const ITDeviceOrientationDidChangeNotification     = @"ITDeviceOrientationDidChangeNotification";
-NSString *const ITDeviceBatteryLevelDidChangeNotification    = @"ITDeviceBatteryLevelDidChangeNotification";
-NSString *const ITDeviceBatteryStateDidChangeNotification    = @"ITDeviceBatteryStateDidChangeNotification";
-NSString *const ITDeviceConnectionStateDidChangeNotification = @"ITDeviceConnectionStateDidChangeNotification";
-static ITDevice *device;
+NSString *const PCDeviceOrientationDidChangeNotification     = @"PCDeviceOrientationDidChangeNotification";
+NSString *const PCDeviceBatteryLevelDidChangeNotification    = @"PCDeviceBatteryLevelDidChangeNotification";
+NSString *const PCDeviceBatteryStateDidChangeNotification    = @"PCDeviceBatteryStateDidChangeNotification";
+NSString *const PCDeviceConnectionStateDidChangeNotification = @"PCDeviceConnectionStateDidChangeNotification";
+static PCDevice *device;
 
 #pragma mark - Private Implementation
-@implementation ITDevice (Private)
+@implementation PCDevice (Private)
 
 #pragma mark ... Private Local Constants
-NSString *const ITDeviceBatteryLevelDefaultsKey    = @"ITDeviceBatteryLevelDefaultsKey";
-NSString *const ITDeviceBatteryStateDefaultsKey    = @"ITDeviceBatteryStateDefaultsKey";
-NSString *const ITDeviceConnectionStateDefaultsKey = @"ITDeviceConnectionStateDefaultsKey";
+NSString *const PCDeviceBatteryLevelDefaultsKey    = @"PCDeviceBatteryLevelDefaultsKey";
+NSString *const PCDeviceBatteryStateDefaultsKey    = @"PCDeviceBatteryStateDefaultsKey";
+NSString *const PCDeviceConnectionStateDefaultsKey = @"PCDeviceConnectionStateDefaultsKey";
 
 #pragma mark ... Instance Methods
 #pragma mark ... ... Orientation Methods
 - (void)orientationDidChange: (NSNotification *)notification
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName: ITDeviceOrientationDidChangeNotification
+    [[NSNotificationCenter defaultCenter] postNotificationName: PCDeviceOrientationDidChangeNotification
                                                         object: notification.object];
 }
 
@@ -36,7 +36,7 @@ NSString *const ITDeviceConnectionStateDefaultsKey = @"ITDeviceConnectionStateDe
 {
     if (_batteryMonitoringEnabled)
     {
-        [[NSNotificationCenter defaultCenter] postNotificationName: ITDeviceBatteryLevelDidChangeNotification
+        [[NSNotificationCenter defaultCenter] postNotificationName: PCDeviceBatteryLevelDidChangeNotification
                                                             object: notification.object];
     }
 }
@@ -45,7 +45,7 @@ NSString *const ITDeviceConnectionStateDefaultsKey = @"ITDeviceConnectionStateDe
 {
     if (_batteryMonitoringEnabled)
     {
-        [[NSNotificationCenter defaultCenter] postNotificationName: ITDeviceBatteryStateDidChangeNotification
+        [[NSNotificationCenter defaultCenter] postNotificationName: PCDeviceBatteryStateDidChangeNotification
                                                             object: notification.object];
     }
 }
@@ -79,8 +79,8 @@ NSString *const ITDeviceConnectionStateDefaultsKey = @"ITDeviceConnectionStateDe
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0),
     ^{
-        [[NSUserDefaults standardUserDefaults] setFloat: [self batteryLevel] forKey: ITDeviceBatteryLevelDefaultsKey];
-        [[NSUserDefaults standardUserDefaults] setInteger: [self batteryState] forKey: ITDeviceBatteryStateDefaultsKey];
+        [[NSUserDefaults standardUserDefaults] setFloat: [self batteryLevel] forKey: PCDeviceBatteryLevelDefaultsKey];
+        [[NSUserDefaults standardUserDefaults] setInteger: [self batteryState] forKey: PCDeviceBatteryStateDefaultsKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
         
         for (; self; sleep(60))
@@ -88,26 +88,26 @@ NSString *const ITDeviceConnectionStateDefaultsKey = @"ITDeviceConnectionStateDe
             if (_batteryMonitoringEnabled)
             {
                 float batteryLevel = [self batteryLevel];
-                if (batteryLevel != [[NSUserDefaults standardUserDefaults] floatForKey: ITDeviceBatteryLevelDefaultsKey])
+                if (batteryLevel != [[NSUserDefaults standardUserDefaults] floatForKey: PCDeviceBatteryLevelDefaultsKey])
                 {
-                    [[NSUserDefaults standardUserDefaults] setFloat: batteryLevel forKey: ITDeviceBatteryLevelDefaultsKey];
+                    [[NSUserDefaults standardUserDefaults] setFloat: batteryLevel forKey: PCDeviceBatteryLevelDefaultsKey];
                     [[NSUserDefaults standardUserDefaults] synchronize];
                     
                     dispatch_async(dispatch_get_main_queue(),
                     ^{
-                        [[NSNotificationCenter defaultCenter] postNotificationName: ITDeviceBatteryLevelDidChangeNotification object: nil];
+                        [[NSNotificationCenter defaultCenter] postNotificationName: PCDeviceBatteryLevelDidChangeNotification object: nil];
                     });
                 }
                 
-                ITDeviceBatteryState batteryState = [self batteryState];
-                if (batteryState != [[NSUserDefaults standardUserDefaults] integerForKey: ITDeviceBatteryStateDefaultsKey])
+                PCDeviceBatteryState batteryState = [self batteryState];
+                if (batteryState != [[NSUserDefaults standardUserDefaults] integerForKey: PCDeviceBatteryStateDefaultsKey])
                 {
-                    [[NSUserDefaults standardUserDefaults] setInteger: batteryState forKey: ITDeviceBatteryStateDefaultsKey];
+                    [[NSUserDefaults standardUserDefaults] setInteger: batteryState forKey: PCDeviceBatteryStateDefaultsKey];
                     [[NSUserDefaults standardUserDefaults] synchronize];
                     
                     dispatch_async(dispatch_get_main_queue(),
                     ^{
-                        [[NSNotificationCenter defaultCenter] postNotificationName: ITDeviceBatteryStateDidChangeNotification object: nil];
+                        [[NSNotificationCenter defaultCenter] postNotificationName: PCDeviceBatteryStateDidChangeNotification object: nil];
                     });
                 }
             }
@@ -120,22 +120,22 @@ NSString *const ITDeviceConnectionStateDefaultsKey = @"ITDeviceConnectionStateDe
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0),
     ^{
-        [[NSUserDefaults standardUserDefaults] setInteger: [self connectionState] forKey: ITDeviceConnectionStateDefaultsKey];
+        [[NSUserDefaults standardUserDefaults] setInteger: [self connectionState] forKey: PCDeviceConnectionStateDefaultsKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
         
         for (; self; sleep(60))
         {
             if (_generateConnectionStateNotifications)
             {
-                ITDeviceConnectionState connectionState = [self connectionState];
-                if (connectionState != [[NSUserDefaults standardUserDefaults] integerForKey: ITDeviceConnectionStateDefaultsKey])
+                PCDeviceConnectionState connectionState = [self connectionState];
+                if (connectionState != [[NSUserDefaults standardUserDefaults] integerForKey: PCDeviceConnectionStateDefaultsKey])
                 {
-                    [[NSUserDefaults standardUserDefaults] setInteger: connectionState forKey: ITDeviceConnectionStateDefaultsKey];
+                    [[NSUserDefaults standardUserDefaults] setInteger: connectionState forKey: PCDeviceConnectionStateDefaultsKey];
                     [[NSUserDefaults standardUserDefaults] synchronize];
                     
                     dispatch_async(dispatch_get_main_queue(),
                     ^{
-                        [[NSNotificationCenter defaultCenter] postNotificationName: ITDeviceConnectionStateDidChangeNotification object: nil];
+                        [[NSNotificationCenter defaultCenter] postNotificationName: PCDeviceConnectionStateDidChangeNotification object: nil];
                     });
                 }
             }
@@ -146,21 +146,21 @@ NSString *const ITDeviceConnectionStateDefaultsKey = @"ITDeviceConnectionStateDe
 @end
 
 #pragma mark - Public Implementation
-@implementation ITDevice
+@implementation PCDevice
 
 #pragma mark ... Local Constants
-NSString *const ITUniqueIdentifierDefaultsKey         = @"ITUniqueIdentifierDefaultsKey";
-char     *const ITDeviceConnectionExternalHostAddress = "www.google.com";
+NSString *const PCUniqueIdentifierDefaultsKey         = @"PCUniqueIdentifierDefaultsKey";
+char     *const PCDeviceConnectionExternalHostAddress = "www.google.com";
 
 #pragma mark ... Class Methods
 + (void)initialize
 {
-    if (self == [ITDevice class])
+    if (self == [PCDevice class])
     {
         static dispatch_once_t initializeOnce;
         dispatch_once(&initializeOnce,
         ^{
-            device = [ITDevice alloc];
+            device = [PCDevice alloc];
             
             #if TARGET_OS_IPHONE
                 [[NSNotificationCenter defaultCenter] addObserver: device
@@ -184,7 +184,7 @@ char     *const ITDeviceConnectionExternalHostAddress = "www.google.com";
     }
 }
 
-+ (ITDevice *)currentDevice
++ (PCDevice *)currentDevice
 {
     return device;
 }
@@ -245,7 +245,7 @@ char     *const ITDeviceConnectionExternalHostAddress = "www.google.com";
 
 - (NSString *)uniqueIdentifier
 {
-    NSString *uid = [[NSUserDefaults standardUserDefaults] stringForKey: ITUniqueIdentifierDefaultsKey];
+    NSString *uid = [[NSUserDefaults standardUserDefaults] stringForKey: PCUniqueIdentifierDefaultsKey];
     
     if (!uid)
     {
@@ -258,7 +258,7 @@ char     *const ITDeviceConnectionExternalHostAddress = "www.google.com";
             uid = [uid stringByAppendingString: (__bridge_transfer NSString *) uuid_string];
         }
         
-        [[NSUserDefaults standardUserDefaults] setValue: uid forKey: ITUniqueIdentifierDefaultsKey];
+        [[NSUserDefaults standardUserDefaults] setValue: uid forKey: PCUniqueIdentifierDefaultsKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
@@ -267,22 +267,22 @@ char     *const ITDeviceConnectionExternalHostAddress = "www.google.com";
 
 #pragma mark ... ... System State Information
 #pragma mark ... ... ... User Interface Idiom Methods
-- (ITUserInterfaceIdiom)userInterfaceIdiom
+- (PCUserInterfaceIdiom)userInterfaceIdiom
 {
     #if TARGET_OS_IPHONE
-        return (ITUserInterfaceIdiom)[[UIDevice currentDevice] userInterfaceIdiom];
+        return (PCUserInterfaceIdiom)[[UIDevice currentDevice] userInterfaceIdiom];
     #else
-        return ITUserInterfaceIdiomDesktop;
+        return PCUserInterfaceIdiomDesktop;
     #endif
 }
 
 #pragma mark ... ... ... Orientation Methods
-- (ITDeviceOrientation)orientation
+- (PCDeviceOrientation)orientation
 {
     #if TARGET_OS_IPHONE
-        return (ITDeviceOrientation)[[UIDevice currentDevice] orientation];
+        return (PCDeviceOrientation)[[UIDevice currentDevice] orientation];
     #else
-        return ITDeviceOrientationPortrait;
+        return PCDeviceOrientationPortrait;
     #endif
 }
 
@@ -372,7 +372,7 @@ char     *const ITDeviceConnectionExternalHostAddress = "www.google.com";
     #endif
 }
 
-- (ITDeviceBatteryState)batteryState
+- (PCDeviceBatteryState)batteryState
 {
     #if TARGET_OS_IPHONE
         return [[UIDevice currentDevice] batteryState];
@@ -387,47 +387,47 @@ char     *const ITDeviceConnectionExternalHostAddress = "www.google.com";
             
             if (pluggedIn && charged)
             {
-                return ITDeviceBatteryStateFull;
+                return PCDeviceBatteryStateFull;
             }
             else if (pluggedIn && !charged)
             {
-                return ITDeviceBatteryStateCharging;
+                return PCDeviceBatteryStateCharging;
             }
             else if (!pluggedIn)
             {
-                return ITDeviceBatteryStateUnplugged;
+                return PCDeviceBatteryStateUnplugged;
             }
         }
     
-        return ITDeviceBatteryStateUnknown;
+        return PCDeviceBatteryStateUnknown;
     #endif
 }
 
 #pragma mark ... ... ... Network Connection Methods
-- (ITDeviceConnectionState)connectionState
+- (PCDeviceConnectionState)connectionState
 {
     SCNetworkReachabilityFlags reachabilityFlags;
-    SCNetworkReachabilityRef reachability = SCNetworkReachabilityCreateWithName(NULL, ITDeviceConnectionExternalHostAddress);
+    SCNetworkReachabilityRef reachability = SCNetworkReachabilityCreateWithName(NULL, PCDeviceConnectionExternalHostAddress);
     SCNetworkReachabilityGetFlags(reachability, &reachabilityFlags);
     CFRelease(reachability);
     
     if (reachabilityFlags & kSCNetworkReachabilityFlagsConnectionRequired)
     {
-        return ITDeviceConnectionStateDisconnected;
+        return PCDeviceConnectionStateDisconnected;
     }
     else if (reachabilityFlags & kSCNetworkReachabilityFlagsReachable)
     {
         #if TARGET_OS_IPHONE
             if (reachabilityFlags & kSCNetworkReachabilityFlagsIsWWAN)
             {
-                return ITDeviceConnectionStateMobile;
+                return PCDeviceConnectionStateMobile;
             }
         #endif
         
-        return ITDeviceConnectionStateWiFi;
+        return PCDeviceConnectionStateWiFi;
     }
     
-    return ITDeviceConnectionStateUnknown;
+    return PCDeviceConnectionStateUnknown;
 }
 
 - (BOOL) isGeneratingConnectionStateNotifications

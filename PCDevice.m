@@ -467,13 +467,14 @@ static PCDevice *PCCurrentDevice;
 - (void)startMonitoringBattery
 {
     __weak typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0),
+    dispatch_queue_t batteryMonitoringQueue = dispatch_queue_create("PCDevice.batteryMonitoringQueue", DISPATCH_QUEUE_CONCURRENT);
+    dispatch_async(batteryMonitoringQueue,
     ^{
        [[NSUserDefaults standardUserDefaults] setFloat: [weakSelf batteryLevel] forKey: PCDeviceBatteryLevelDefaultsKey];
        [[NSUserDefaults standardUserDefaults] setInteger: [weakSelf batteryState] forKey: PCDeviceBatteryStateDefaultsKey];
        [[NSUserDefaults standardUserDefaults] synchronize];
        
-       for (; weakSelf; [[NSRunLoop mainRunLoop] runUntilDate: [NSDate dateWithTimeIntervalSinceNow: 60]])
+       for (; weakSelf; sleep(60))
        {
            if ([weakSelf batteryMonitoringIsEnabled])
            {
@@ -511,12 +512,13 @@ static PCDevice *PCCurrentDevice;
 - (void)startMonitoringConnectionState
 {
     __weak typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0),
+    dispatch_queue_t connectionStateMonitoringQueue = dispatch_queue_create("PCDevice.connectionStateMonitoringQueue", DISPATCH_QUEUE_CONCURRENT);
+    dispatch_async(connectionStateMonitoringQueue,
     ^{
         [[NSUserDefaults standardUserDefaults] setInteger: [weakSelf connectionState] forKey: PCDeviceConnectionStateDefaultsKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
 
-        for (; weakSelf; [[NSRunLoop mainRunLoop] runUntilDate: [NSDate dateWithTimeIntervalSinceNow: 60]])
+        for (; weakSelf; sleep(60))
         {
             if ([weakSelf isGeneratingConnectionStateNotifications])
             {

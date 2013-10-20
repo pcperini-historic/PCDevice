@@ -8,30 +8,91 @@
 
 #import <Foundation/Foundation.h>
 #import <SystemConfiguration/SCNetworkReachability.h>
+#import <sys/sysctl.h>
 
 #if !TARGET_OS_IPHONE
-    #import <sys/sysctl.h>
     #import <IOKit/ps/IOPSKeys.h>
     #import <IOKit/ps/IOPowerSources.h>
     #import <SystemConfiguration/SystemConfiguration.h>
 #endif
 
 
-#pragma mark - Global Constants
-#define PCCurrentDevice [PCDevice currentDevice]
+#pragma mark - External Constants
+/*!
+ *  DOCME
+ */
 extern  NSString *const PCDeviceOrientationDidChangeNotification;
+
+/*!
+ *  DOCME
+ */
 extern  NSString *const PCDeviceBatteryLevelDidChangeNotification;
+
+/*!
+ *  DOCME
+ */
 extern  NSString *const PCDeviceBatteryStateDidChangeNotification;
+
+/*!
+ *  DOCME
+ */
 extern  NSString *const PCDeviceConnectionStateDidChangeNotification;
 
-#pragma mark - Global Enumerations
+/*!
+ *  DOCME
+ */
 typedef enum
 {
     PCUserInterfaceIdiomPhone,
-    PCUserInterfaceIdiomPad,
+    PCUserInterfaceIdiomTablet,
     PCUserInterfaceIdiomDesktop
 } PCUserInterfaceIdiom;
 
+/*!
+ *  DOCME
+ *  Thanks, Erica Sadun!
+ */
+typedef enum
+{
+    // Unknown
+    PCDeviceUnknownPlatform = -1,
+    
+    // iPhones
+    PCDeviceiPhonePlatform,
+    PCDeviceiPhone3GPlatform,
+    PCDeviceiPhone3GSPlatform,
+    PCDeviceiPhone4Platform,
+    PCDeviceiPhone4SPlatform,
+    PCDeviceiPhone5Platform,
+    PCDeviceiPhone5cPlatform,
+    PCDeviceiPhone5sPlatform,
+    
+    // iPods Touch
+    PCDevice1stGeniPodTouchPlatform,
+    PCDevice2ndGeniPodTouchPlatform,
+    PCDevice3rdGeniPodTouchPlatform,
+    PCDevice4thGeniPodTouchPlatform,
+    PCDevice5thGeniPodTouchPlatform,
+    
+    // iPads
+    PCDeviceiPadPlatform,
+    PCDeviceiPad2Platform,
+    PCDeviceiPad3Platform,
+    PCDevice4thGeniPadPlatform,
+    
+    // iPads Mini
+    PCDeviceiPadMiniPlatform,
+    
+    // Macs
+    PCDeviceiMacPlatform,
+    PCDeviceMacBookAirPlatform,
+    PCDeviceMacBookProPlatform,
+    PCDeviceOtherMacPlatform
+} PCDevicePlatform;
+
+/*!
+ *  DOCME
+ */
 typedef enum
 {
     PCDeviceBatteryStateUnknown,
@@ -40,17 +101,23 @@ typedef enum
     PCDeviceBatteryStateFull,
 } PCDeviceBatteryState;
 
+/*!
+ *  DOCME
+ */
 typedef enum
 {
-    PCDeviceOrientationUknown,
-    PCDeviceOrientationPortrait,
-    PCDeviceOrientationPortraitUpsideDown,
-    PCDeviceOrientationLandscapeLeft,
-    PCDeviceOrientationLandscapeRight,
-    PCDeviceOrientationFaceUp,
-    PCDeviceOrientationFaceDown
+    PCDeviceOrientationUknown               = 0b00000000,
+    PCDeviceOrientationPortrait             = 0b00000001,
+    PCDeviceOrientationPortraitUpsideDown   = 0b00000010,
+    PCDeviceOrientationLandscapeLeft        = 0b00000100,
+    PCDeviceOrientationLandscapeRight       = 0b00001000,
+    PCDeviceOrientationFaceUp               = 0b00010000,
+    PCDeviceOrientationFaceDown             = 0b00100000
 } PCDeviceOrientation;
 
+/*!
+ *  DOCME
+ */
 typedef enum
 {
     PCDeviceConnectionStateUnknown,
@@ -59,53 +126,115 @@ typedef enum
     PCDeviceConnectionStateDisconnected
 } PCDeviceConnectionState;
 
-#pragma mark - Global Macros
+#pragma mark - Macros
+/*!
+ *  DOCME
+ */
 #define PCDeviceOrientationIsPortrait(orientation)                \
         (orientation == PCDeviceOrientationPortrait            || \
          orientation == PCDeviceOrientationPortraitUpsideDown)
 
+/*!
+ *  DOCME
+ */
 #define PCDeviceOrientationIsLandscape(orientation)               \
         (orientation == PCDeviceOrientationLandscapeLeft       || \
          orientation == PCDeviceOrientationLandscapeRight)
 
-#pragma mark - Public Interface
 @interface PCDevice : NSObject
-{
-    #pragma mark ... Instance Variables
-    @private
-    BOOL _batteryMonitoringEnabled;
-    BOOL _generateConnectionStateNotifications;
-}
 
-#pragma mark ... Class Methods
+#pragma mark - Singletons
 + (PCDevice *) currentDevice;
 
-#pragma mark ... Instance Properties
-#pragma mark ... ... System Identification Information
-@property (nonatomic, readonly, retain)                                    NSString *name;
-@property (nonatomic, readonly, retain)                                    NSString *systemName;
-@property (nonatomic, readonly, retain)                                    NSString *systemVersion;
-@property (nonatomic, readonly, retain)                                    NSString *model;
-@property (nonatomic, readonly, retain)                                    NSString *uniqueIdentifier;
-#pragma mark ... ... System State Information
-#pragma mark ... ... ... User Interface Idiom Information
-@property (nonatomic, readonly)                                            PCUserInterfaceIdiom userInterfaceIdiom;
-#pragma mark ... ... ... Orientation Information
-@property (nonatomic, readonly)                                            PCDeviceOrientation orientation;
+#pragma mark - Properties
+/*!
+ *  DOCME
+ */
+@property (nonatomic, readonly) NSString *name;
+
+/*!
+ *  DOCME
+ */
+@property (nonatomic, readonly) NSString *systemName;
+
+/*!
+ *  DOCME
+ */
+@property (nonatomic, readonly) NSString *systemVersion;
+
+/*!
+ *  DOCME
+ */
+@property (nonatomic, readonly) NSString *model;
+
+/*!
+ *  DOCME
+ */
+@property (nonatomic, readonly) NSString *uniqueIdentifier;
+
+/*!
+ *  DOCME
+ */
+@property (nonatomic, readonly) PCUserInterfaceIdiom userInterfaceIdiom;
+
+/*!
+ *  DOCME
+ */
+@property (nonatomic, readonly) PCDevicePlatform platform;
+
+/*!
+ *  DOCME
+ */
+@property (nonatomic, readonly) PCDeviceOrientation orientation;
+
+/*!
+ *  DOCME
+ */
 @property (nonatomic, getter = isGeneratingDeviceOrientationNotifications) BOOL generatesDeviceOrientationNotifications;
-#pragma mark ... ... ... Multitasking Information
-@property (nonatomic, readonly, getter = isMultitaskingSupported)          BOOL multitaskingSupported;
-#pragma mark ... ... ... Push Notification Information
-@property (nonatomic, readonly, getter = arePushNotificationsSupported)    BOOL pushNotificationsSupported;
-#pragma mark ... ... ... iCloud Synchronization Information
-@property (nonatomic, readonly, getter = isiCloudKeyValSyncSupported)      BOOL iCloudKeyValSyncSupported;
-@property (nonatomic, readonly, getter = isiCloudFileSyncSupported)        BOOL iCloudFileSyncSupported;
-#pragma mark ... ... ... Batter Information
-@property (nonatomic, readonly)                                            float batteryLevel;
-@property (nonatomic, getter = isBatteryMonitoringEnabled)                 BOOL batteryMonitoringEnabled;
-@property (nonatomic, readonly)                                            PCDeviceBatteryState batteryState;
-#pragma mark ... ... ... Network Connection Information
-@property (nonatomic, readonly)                                            PCDeviceConnectionState connectionState;
-@property (nonatomic, getter = isGeneratingConnectionStateNotifications)   BOOL generatesConnectionStateNotifications;
+
+/*!
+ *  DOCME
+ */
+@property (nonatomic, readonly, getter = multitaskingIsSupported) BOOL multitaskingSupported;
+
+/*!
+ *  DOCME
+ */
+@property (nonatomic, readonly, getter = pushNotificationsAreSupported) BOOL pushNotificationsSupported;
+
+/*!
+ *  DOCME
+ */
+@property (nonatomic, readonly, getter = iCloudKeyValSyncIsSupported) BOOL iCloudKeyValSyncSupported;
+
+/*!
+ *  DOCME
+ */
+@property (nonatomic, readonly, getter = iCloudFileSyncIsSupported) BOOL iCloudFileSyncSupported;
+
+/*!
+ *  DOCME
+ */
+@property (nonatomic, readonly) CGFloat batteryLevel;
+
+/*!
+ *  DOCME
+ */
+@property (nonatomic, getter = batteryMonitoringIsEnabled) BOOL batteryMonitoringEnabled;
+
+/*!
+ *  DOCME
+ */
+@property (nonatomic, readonly) PCDeviceBatteryState batteryState;
+
+/*!
+ *  DOCME
+ */
+@property (nonatomic, readonly) PCDeviceConnectionState connectionState;
+
+/*!
+ *  DOCME
+ */
+@property (nonatomic, getter = isGeneratingConnectionStateNotifications) BOOL generatesConnectionStateNotifications;
 
 @end

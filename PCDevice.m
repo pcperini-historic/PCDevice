@@ -311,20 +311,6 @@ static PCDevice *PCCurrentDevice;
     #endif
 }
 
-- (void)setGeneratesDeviceOrientationNotifications:(BOOL)generatesDeviceOrientationNotifications
-{
-    #if TARGET_OS_IPHONE
-    if (generatesDeviceOrientationNotifications && ![[UIDevice currentDevice] isGeneratingDeviceOrientationNotifications])
-    {
-        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-    }
-    else if (!generatesDeviceOrientationNotifications && [[UIDevice currentDevice] isGeneratingDeviceOrientationNotifications])
-    {
-        [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
-    }
-    #endif
-}
-
 - (BOOL)isMultitaskingSupported
 {
     #if TARGET_OS_IPHONE
@@ -353,6 +339,31 @@ static PCDevice *PCCurrentDevice;
     return [[NSFileManager defaultManager] respondsToSelector: @selector(URLForUbiquityContainerIdentifier:)] && [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier: nil];
 }
 
+- (NSDictionary *)batteryDictionary
+{
+    #if !TARGET_OS_IPHONE
+    NSString *iopsTypeKey = [NSString stringWithCString: kIOPSTypeKey encoding: NSUTF8StringEncoding];
+    NSString *iopsBatteryType = [NSString stringWithCString: kIOPSInternalBatteryType encoding: NSUTF8StringEncoding];
+    
+    CFTypeRef powerSourcesBlob = IOPSCopyPowerSourcesInfo();
+    CFArrayRef powerSources = IOPSCopyPowerSourcesList(powerSourcesBlob);
+    for (int i = 0; i < CFArrayGetCount(powerSources); i++)
+    {
+        CFTypeRef powerSourceBlob = CFArrayGetValueAtIndex(powerSources, i);
+        NSDictionary *powerSource = (__bridge_transfer NSDictionary *)IOPSGetPowerSourceDescription(powerSourcesBlob, powerSourceBlob);
+        if ([(NSString *)[powerSource objectForKey: iopsTypeKey] isEqualToString: iopsBatteryType])
+        {
+            CFRelease(powerSourceBlob);
+            CFRelease(powerSources);
+            
+            return powerSource;
+        }
+    }
+    #endif
+    
+    return nil;
+}
+
 - (CGFloat)batteryLevel
 {
     #if TARGET_OS_IPHONE
@@ -367,16 +378,6 @@ static PCDevice *PCCurrentDevice;
     return -1;
     #endif
 }
-
-- (void)setBatteryMonitoringEnabled:(BOOL)batteryMonitoringEnabled
-{
-    _batteryMonitoringEnabled = batteryMonitoringEnabled;
-    
-    #if TARGET_OS_IPHONE
-    [[UIDevice currentDevice] setBatteryMonitoringEnabled: batteryMonitoringEnabled];
-    #endif
-}
-
 - (PCDeviceBatteryState)batteryState
 {
     #if TARGET_OS_IPHONE
@@ -408,7 +409,6 @@ static PCDevice *PCCurrentDevice;
     #endif
 }
 
-#pragma mark ... ... ... Network Connection Methods
 - (PCDeviceConnectionState)connectionState
 {
     SCNetworkReachabilityFlags reachabilityFlags;
@@ -435,9 +435,131 @@ static PCDevice *PCCurrentDevice;
     return PCDeviceConnectionStateUnknown;
 }
 
+#pragma mark - Mutators
+- (void)setGeneratesDeviceOrientationNotifications:(BOOL)generatesDeviceOrientationNotifications
+{
+    #if TARGET_OS_IPHONE
+    if (generatesDeviceOrientationNotifications && ![[UIDevice currentDevice] isGeneratingDeviceOrientationNotifications])
+    {
+        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+    }
+    else if (!generatesDeviceOrientationNotifications && [[UIDevice currentDevice] isGeneratingDeviceOrientationNotifications])
+    {
+        [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
+    }
+    #endif
+}
+
+- (void)setBatteryMonitoringEnabled:(BOOL)batteryMonitoringEnabled
+{
+    _batteryMonitoringEnabled = batteryMonitoringEnabled;
+    
+    #if TARGET_OS_IPHONE
+    [[UIDevice currentDevice] setBatteryMonitoringEnabled: batteryMonitoringEnabled];
+    #endif
+}
+
 - (void) setGeneratesConnectionStateNotifications:(BOOL)generatesConnectionStateNotifications
 {
     _generatesConnectionStateNotifications = generatesConnectionStateNotifications;
+}
+
+- (void)startMonitoringBattery
+{
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0),
+    ^{
+       [[NSUserDefaults standardUserDefaults] setFloat: [weakSelf batteryLevel] forKey: PCDeviceBatteryLevelDefaultsKey];
+       [[NSUserDefaults standardUserDefaults] setInteger: [weakSelf batteryState] forKey: PCDeviceBatteryStateDefaultsKey];
+       [[NSUserDefaults standardUserDefaults] synchronize];
+       
+       for (; weakSelf; [[NSRunLoop mainRunLoop] runUntilDate: [NSDate dateWithTimeIntervalSinceNow: 60]])
+       {
+           if ([weakSelf batteryMonitoringIsEnabled])
+           {
+               float batteryLevel = [weakSelf batteryLevel];
+               if (batteryLevel != [[NSUserDefaults standardUserDefaults] floatForKey: PCDeviceBatteryLevelDefaultsKey])
+               {
+                   [[NSUserDefaults standardUserDefaults] setFloat: batteryLevel forKey: PCDeviceBatteryLevelDefaultsKey];
+                   [[NSUserDefaults standardUserDefaults] synchronize];
+                   
+                   dispatch_async(dispatch_get_main_queue(),
+                   ^{
+                       [[NSNotificationCenter defaultCenter] postNotificationName: PCDeviceBatteryLevelDidChangeNotification
+                                                                           object: nil];
+                   });
+               }
+               
+               PCDeviceBatteryState batteryState = [weakSelf batteryState];
+               if (batteryState != [[NSUserDefaults standardUserDefaults] integerForKey: PCDeviceBatteryStateDefaultsKey])
+               {
+                   [[NSUserDefaults standardUserDefaults] setInteger: batteryState forKey: PCDeviceBatteryStateDefaultsKey];
+                   [[NSUserDefaults standardUserDefaults] synchronize];
+                   
+                   dispatch_async(dispatch_get_main_queue(),
+                   ^{
+                       [[NSNotificationCenter defaultCenter] postNotificationName: PCDeviceBatteryStateDidChangeNotification
+                                                                           object: nil];
+                   });
+               }
+           }
+       }
+    });
+}
+
+#pragma mark ... ... Network Connection Methods
+- (void)startMonitoringConnectionState
+{
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0),
+    ^{
+        [[NSUserDefaults standardUserDefaults] setInteger: [weakSelf connectionState] forKey: PCDeviceConnectionStateDefaultsKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+
+        for (; weakSelf; [[NSRunLoop mainRunLoop] runUntilDate: [NSDate dateWithTimeIntervalSinceNow: 60]])
+        {
+            if ([weakSelf isGeneratingConnectionStateNotifications])
+            {
+                PCDeviceConnectionState connectionState = [weakSelf connectionState];
+                if (connectionState != [[NSUserDefaults standardUserDefaults] integerForKey: PCDeviceConnectionStateDefaultsKey])
+                {
+                    [[NSUserDefaults standardUserDefaults] setInteger: connectionState forKey: PCDeviceConnectionStateDefaultsKey];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
+                   
+                    dispatch_async(dispatch_get_main_queue(),
+                    ^{
+                        [[NSNotificationCenter defaultCenter] postNotificationName: PCDeviceConnectionStateDidChangeNotification
+                                                                            object: nil];
+                    });
+                }
+            }
+        }
+    });
+}
+
+#pragma mark - Responders
+- (void)orientationDidChange: (NSNotification *)notification
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName: PCDeviceOrientationDidChangeNotification
+                                                        object: [notification object]];
+}
+
+- (void)batteryLevelDidChange: (NSNotification *)notification
+{
+    if ([self batteryMonitoringIsEnabled])
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName: PCDeviceBatteryLevelDidChangeNotification
+                                                            object: [notification object]];
+    }
+}
+
+- (void)batteryStateDidChange: (NSNotification *)notification
+{
+    if ([self batteryMonitoringIsEnabled])
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName: PCDeviceBatteryStateDidChangeNotification
+                                                            object: [notification object]];
+    }
 }
 
 @end

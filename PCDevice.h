@@ -10,10 +10,12 @@
 #import <SystemConfiguration/SCNetworkReachability.h>
 #import <sys/sysctl.h>
 
-#if !TARGET_OS_IPHONE
-    #import <IOKit/ps/IOPSKeys.h>
-    #import <IOKit/ps/IOPowerSources.h>
-    #import <SystemConfiguration/SystemConfiguration.h>
+#if TARGET_OS_IPHONE
+#import <UIKit/UIKit.h>
+#else
+#import <IOKit/ps/IOPSKeys.h>
+#import <IOKit/ps/IOPowerSources.h>
+#import <SystemConfiguration/SystemConfiguration.h>
 #endif
 
 

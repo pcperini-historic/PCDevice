@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "PCDevice"
-  s.version      = "v1.0.0"
+  s.version      = "1.0.0"
   s.summary      = "The PCDevice class provides a singleton instance representing the current device."
 
   s.description  = <<-DESC
